@@ -7,7 +7,7 @@
 import math
 
 class Queue:
-    def __init__(self, time_quantum, priority):
+    def __init__(self, time_quantum):
         self.time_quantum = time_quantum
         self.queue = []
 
@@ -17,12 +17,27 @@ class Process:
         self.burst_time = burst_time
         self.i_o = i_o
 
-# Sample given in specs, but not sure if this is the proper way to input
-A = Process(0, [5, 5, 5], [2, 2])
-B = Process(2, [2, 6], [2])
-C = Process(0, [30])
+def get_input():
+    # GET COMMANDLINE INPUT
+    arrival_time = int(input("Enter arrival time: "))
+    burst_time = []
+    i_o = []
+
+    while True:
+        # continuously ask for burst time and i/o until input is empty
+        break
+
+    return arrival_time, burst_time, i_o
+
+def mlfq(queues: list, processes: list):
+    pass
+
+
+# Sample given in specs
+# A = Process(0, [5, 5, 5], [2, 2])
+# B = Process(2, [2, 6], [2])
+# C = Process(0, [30], [])
 
 Q_1 = Queue(8)
 Q_2 = Queue(8)
 Q_3 = Queue(math.inf)
-
