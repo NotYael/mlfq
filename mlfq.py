@@ -11,32 +11,60 @@ class Queue:
         self.time_quantum = time_quantum
         self.queue = []
 
+    def __str__(self):
+        return f"Queue(time_quantum={self.time_quantum}, self.queue={self.queue})"
+
 class Process:
-    def __init__(self, arrival_time, cpu_time: list, io_time: list):
+    def __init__(self, label, arrival_time, cpu_time: list, io_time: list):
+        self.label = label
         self.arrival_time = arrival_time
         self.cpu_time = cpu_time
         self.io_time = io_time
 
     def __str__(self):
-        return f"Process(arrival_time={self.arrival_time}, cpu_bursts={self.cpu_time}, io_bursts={self.io_time})"
+        return f"Process(label={self.label}, arrival_time={self.arrival_time}, cpu_bursts={self.cpu_time}, io_bursts={self.io_time})"
 
 def get_input():
-    processes = {}
-    no_of_processes = int(input("Enter number of processes: "))
-    for i in range(no_of_processes):
-        char_name = chr(65 + i)
-        arrival_time = int(input("Enter arrival time for process: "))
-        print("Enter CPU and I/O burst in one line separated by space (e.g. 5 5 5 2 2)")
-        cpu_time = [int(x) for x in input("Enter CPU Burst Time: ").split()]
-        i_o = [int(x) for x in input("Enter I/O Burst Time: ").split()]
+    queues = []
+    processes = []
 
-        # Sample: "A": Process(0, [5, 5, 5], [2, 2]) - in dictionary format so we can access through process["A"]
-        processes[char_name] = Process(arrival_time, cpu_time, i_o)
+    # Queues 
+    print("# Enter Scheduler Details #")
+    num_processes = int(input(""))
+    for i in range(2):
+        time_allotment = int(input())
+        queues.append(Queue(time_allotment))
+    # Infinite time allotment for last queue
+    queues.append(Queue(math.inf))
 
-    # not sure if we should make a list of Chars ([A, B, C]) to help with indexing? 
-    return no_of_processes, processes
+    # Context Switch
+    context_switch = int(input(""))
 
-def mlfq(queues: list, processes: list):
+    # Processes
+    print(f"# Enter {num_processes} Process Details #")
+    for i in range(num_processes):
+        cpu_bursts = []
+        io_bursts = []
+        input_data = input().split(";")
+        label = input_data[0]
+        arrival_time = int(input_data[1])
+        for i in range(2, len(input_data)):
+            if i % 2 == 0:
+                cpu_bursts.append(int(input_data[i]))
+            else:
+                io_bursts.append(int(input_data[i]))
+        
+        processes.append(Process(label, arrival_time, cpu_bursts, io_bursts))
+
+    # for queue in queues:
+    #     print(queue)
+
+    # for process in processes:
+    #     print(process)
+
+    return queues, processes, context_switch
+
+def mlfq(queues: list, processes: list, context_switch: int):
     pass
 
 # Sample given in specs
@@ -45,9 +73,8 @@ def mlfq(queues: list, processes: list):
 # C = Process(0, [30], [])
 
 def main():
-    queues = [Queue(8), Queue(8), Queue(math.inf)]
-    no_of_processes, processes = get_input()
-    # mlfq(no_of_processes, processes, queues)
+    queues, processes, context_switch = get_input()
+    mlfq(queues, processes, context_switch)
 
 if __name__ == "__main__":
     main()
