@@ -6,17 +6,10 @@
 
 import math
 
-class Queue_1:
-    time_allotment = 8
-    queue = []
-
-class Queue_2:
-    time_allotment = 8
-    queue = []
-
-class Queue_3:
-    time_allotment = math.inf
-    queue = []
+class Queue:
+    def __init__(self, time_quantum, priority):
+        self.time_quantum = time_quantum
+        self.queue = []
 
 class Process:
     def __init__(self, arrival_time, burst_time: list, i_o: list):
@@ -28,3 +21,8 @@ class Process:
 A = Process(0, [5, 5, 5], [2, 2])
 B = Process(2, [2, 6], [2])
 C = Process(0, [30])
+
+Q_1 = Queue(8)
+Q_2 = Queue(8)
+Q_3 = Queue(math.inf)
+
