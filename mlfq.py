@@ -152,7 +152,6 @@ def mlfq(queues: list, processes: list, context_switch: int):
             cpu.current_burst -= 1
             # add case for I/O time instead
         
-        # still need to implement checking if I/O queue is empty
         if io_queue:
             for process in io_queue:
                 process.current_io += 1
