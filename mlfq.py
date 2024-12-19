@@ -41,7 +41,6 @@ def get_input():
     queues = []
     processes = []
 
-    # Queues 
     print("# Enter Scheduler Details #")
     num_processes = int(input(""))
     for i in range(2):
@@ -50,10 +49,8 @@ def get_input():
     # Infinite time allotment for last queue
     queues.append(Queue(2, math.inf))
 
-    # Context Switch
     context_switch = int(input(""))
 
-    # Processes
     print(f"# Enter {num_processes} Process Details #")
     for i in range(num_processes):
         cpu_bursts = []
@@ -76,7 +73,6 @@ def get_input():
     #     print(process)
 
     return queues, processes, context_switch
-
 
 # MLFQ Algorithm
 # while there are still processes to run
@@ -124,7 +120,7 @@ def mlfq(queues: list, processes: list, context_switch: int):
 
         # account for round robin somewhere 
 
-        # swap cpu if quantum is used up
+        # swap cpu if quantum is used up / and also check if there is still remaining burst and i/o time
         if cpu and cpu.current_burst == 0:
             pass
 
@@ -155,6 +151,17 @@ def mlfq(queues: list, processes: list, context_switch: int):
             cpu.used_quantum += 1
             cpu.current_burst -= 1
             # add case for I/O time instead
+        
+        # still need to implement checking if I/O queue is empty
+        if io_queue:
+            for process in io_queue:
+                process.current_io += 1
+                if process.current_io == process.io_time[0]:
+                    io_queue.remove(process)
+                    process.current_io = 0
+                    process.io_time.pop(0)
+                    # add process back to ready queue
+                    ready_queue.append(process)
 
         # testing
         if time == 10:
