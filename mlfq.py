@@ -65,7 +65,33 @@ def get_input():
     return queues, processes, context_switch
 
 def mlfq(queues: list, processes: list, context_switch: int):
-    pass
+
+    time = 0
+    num_processes = len(processes)
+    done_processes = 0
+
+    print("# Scheduling Results #")
+
+    while True:
+        if done_processes == num_processes:
+            # SIMULATION DONE STUFF
+            # PRINT TURNAROUND TIMES
+            # PRINT WAITING TIMES
+            break
+        
+        print(f"At Time {time}")
+
+        # Case of arriving process
+        arrived = [process.label for process in processes if process.arrival_time == time]
+        if arrived:
+            print(f"Arriving {arrived} ")
+
+        order = []
+        time += 1
+
+        if time == 10:
+            break
+
 
 # Sample given in specs
 # A = Process(0, [5, 5, 5], [2, 2])
