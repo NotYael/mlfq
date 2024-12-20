@@ -235,7 +235,7 @@ def mlfq(queues: list[Queue], processes: list[Process], num_processes: int, cont
     print(f"Average Turn-around time = {sum(turnaround_times)/num_processes} ms")
 
     # Compute waiting time for each process
-    for process in completed: print(f"Waiting time for Process A : {process.completion_time - process.arrival_time - process.total_burst} ms")
+    for process in completed: print(f"Waiting time for Process {process.name} : {process.completion_time - process.arrival_time - process.total_burst} ms")
 
 def main():
     queues, processes, num_processes, context_switch = get_input()
