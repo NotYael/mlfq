@@ -223,7 +223,7 @@ def mlfq(queues: list[Queue], processes: list[Process], num_processes: int, cont
 
     turnaround_times: list[int] = []
 
-    sorted(completed, key=lambda Process: Process.name)
+    completed = sorted(completed, key=lambda process: process.name)
 
     # Compute and output turn-around time for each process
     for process in completed:
