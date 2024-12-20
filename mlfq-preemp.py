@@ -108,6 +108,8 @@ def mlfq(queues: list[Queue], processes: list[Process], num_processes: int, cont
             # Handle process from CPU
             if process == cpu:
                 # Process exceeds time allotment
+                #if process.priority == 0:
+                    #print(f"Process {process.name} has uptime of {process.uptime}")
                 if process.uptime == queues[process.priority].time_allotment:
                     demotion = process.name
                     process.priority += 1
@@ -118,9 +120,12 @@ def mlfq(queues: list[Queue], processes: list[Process], num_processes: int, cont
                     if process.curr_cpu: process.cpu_bursts.insert(0, process.curr_cpu)
 
                 # Process completes RR quantum
-                elif process.priority == 0 and process.uptime == 4:
+                elif process.priority == 0 and process.uptime % 4 == 0:
                     cpu = None
-                    curr_cs = context_switch
+                    if (queues[process.priority].processes == []): 
+                        pass
+                    else: 
+                        curr_cs = context_switch
                     from_cpu.append(process)
                     if process.curr_cpu: process.cpu_bursts.insert(0, process.curr_cpu)
 
@@ -132,7 +137,6 @@ def mlfq(queues: list[Queue], processes: list[Process], num_processes: int, cont
                         io.append(process)
                     cpu = None
                     curr_cs = context_switch
-
             # Handle process from I/O
             if process in io:
                 if process.curr_io == 0 and process.cpu_bursts:
@@ -146,13 +150,13 @@ def mlfq(queues: list[Queue], processes: list[Process], num_processes: int, cont
         enqueue(queues, sorted(from_cpu, key=lambda Process: Process.name))
         # Enqueue processes from I/O
         enqueue(queues, sorted(from_io, key=lambda Process: Process.name))
-
         # Context switch to new process
         if curr_cs > 0:
             curr_cs -= 1
         else:
             if cpu:
                 for queue in queues:
+                    #print(f"Check if curr queue prio {queue.priority} is less than {cpu.priority} and {queue.processes} is not empty")
                     if queue.priority < cpu.priority and queue.processes:
                         # Save current CPU process state
                         if cpu:
