@@ -110,6 +110,7 @@ def mlfq(queues: list[Queue], processes: list[Process], num_processes: int, cont
                 # Process exceeds time allotment
                 if process.uptime == queues[process.priority].time_allotment:
                     demotion = process.name
+                    print(f"[DEBUG] {process.name} DEMOTED")
                     process.priority += 1
                     process.uptime = 0
                     cpu = None
@@ -152,6 +153,26 @@ def mlfq(queues: list[Queue], processes: list[Process], num_processes: int, cont
             print(f"[DEBUG] CONTEXT SWITCH TIME LEFT: {curr_cs}")
             curr_cs -= 1
         else:
+            if cpu:
+                for queue in queues:
+                    if queue.priority < cpu.priority and queue.processes:
+                        print("[DEBUG] Preempting CPU for a higher-priority process.")
+                        # Save current CPU process state
+                        if cpu:
+                            # Put remaining burst back
+                            if cpu.curr_cpu > 0:
+                                cpu.cpu_bursts.insert(0, cpu.curr_cpu)
+                            # Reset uptime (do not change priority)
+                            cpu.uptime = 0
+                            # Re-insert CPU process into its appropriate queue
+                            queues[cpu.priority].processes.append(cpu)
+
+                        # Switch to the higher-priority process
+                        cpu = queue.processes.pop(0)
+                        cpu.curr_cpu = cpu.cpu_bursts.pop(0)
+                        curr_cs = context_switch
+                        break
+
             if not cpu:
                 for queue in queues:
                     if queue.processes:
@@ -163,7 +184,6 @@ def mlfq(queues: list[Queue], processes: list[Process], num_processes: int, cont
                 cpu.curr_cpu -= 1
                 cpu.uptime += 1
                 
-
         # [X] Output time
         # [X] Output newly arriving processes
         # [X] Output process done
