@@ -193,7 +193,7 @@ def mlfq(queues: list[Queue], processes: list[Process], num_processes: int, cont
         # [X] Output process demotion
 
         # [DEBUG]
-        for process in processes: print(process)
+        # for process in processes: print(process)
         
         # Output time
         print(f"At Time = {time}")
@@ -232,7 +232,7 @@ def mlfq(queues: list[Queue], processes: list[Process], num_processes: int, cont
         print(f"Turn-around time for Process {process.name} : {process.completion_time} - {process.arrival_time} = {turnaround_time} ms")
     
     # Compute and output average turn-around time
-    print(f"Average Turn-around time = {sum(turnaround_times)/num_processes} ms")
+    print(f"Average Turn-around time = {round((sum(turnaround_times)/num_processes), 2)} ms")
 
     # Compute waiting time for each process
     for process in completed: print(f"Waiting time for Process {process.name} : {process.completion_time - process.arrival_time - process.total_burst} ms")
