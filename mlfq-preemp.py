@@ -56,7 +56,7 @@ def enqueue(queues: list[Queue], processes: list[Process]):
     if processes:
         for queue in queues:
             for process in processes:
-                if process.priority == queue.priority:
+                if process.priority == queue.priority and process not in queue.processes:
                     queue.processes.append(process)
                     # processes.remove(process)
 
