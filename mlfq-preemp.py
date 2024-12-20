@@ -110,7 +110,6 @@ def mlfq(queues: list[Queue], processes: list[Process], num_processes: int, cont
                 # Process exceeds time allotment
                 if process.uptime == queues[process.priority].time_allotment:
                     demotion = process.name
-                    print(f"[DEBUG] {process.name} DEMOTED")
                     process.priority += 1
                     process.uptime = 0
                     cpu = None
@@ -150,13 +149,11 @@ def mlfq(queues: list[Queue], processes: list[Process], num_processes: int, cont
 
         # Context switch to new process
         if curr_cs > 0:
-            print(f"[DEBUG] CONTEXT SWITCH TIME LEFT: {curr_cs}")
             curr_cs -= 1
         else:
             if cpu:
                 for queue in queues:
                     if queue.priority < cpu.priority and queue.processes:
-                        print("[DEBUG] Preempting CPU for a higher-priority process.")
                         # Save current CPU process state
                         if cpu:
                             # Put remaining burst back
