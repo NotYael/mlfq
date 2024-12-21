@@ -137,13 +137,19 @@ def mlfq(queues: list[Queue], processes: list[Process], num_processes: int, cont
                         io.append(process)
                     cpu = None
                     curr_cs = context_switch
-            # Handle process from I/O
-            if process in io:
-                if process.curr_io == 0 and process.cpu_bursts:
+
+        # Handle process from I/O
+        if io:
+            for process in io[:]:
+                if process.curr_io == 0:
                     io.remove(process)
-                    from_io.append(process)
-                else: process.curr_io -= 1
-        
+                    if process.cpu_bursts:
+                        from_io.append(process)
+                    else:
+                        processes.remove(process)
+                else: 
+                    process.curr_io -= 1
+                        
         # Enqueue newly arriving processes
         enqueue(queues, sorted(from_new, key=lambda Process: Process.name))
         # Enqueue process from CPU
